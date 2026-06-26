@@ -54,7 +54,6 @@ alias depends='function_depends'            # show what depends on a package
 alias u='sudo pacman -Syyu'                 # full system update (force refresh)
 alias update='sudo pacman -Syyu'            # full system update (force refresh)
 alias upd='sudo pacman -Syu'                # system update (normal refresh)
-alias pksyua='paru -Syu --noconfirm'        # update everything incl. AUR, no prompts
 alias upall='paru -Syu --noconfirm'         # update everything incl. AUR, no prompts
 alias upa='paru -Syu --noconfirm'           # update everything incl. AUR, no prompts
 alias upqll='paru -Syu --noconfirm'         # update everything incl. AUR, no prompts
@@ -62,12 +61,9 @@ alias upal='paru -Syu --noconfirm'          # update everything incl. AUR, no pr
 alias ua='paru -Syu --noconfirm'            # update everything incl. AUR, no prompts
 alias paruskip='paru -S --mflags --skipinteg' # build AUR pkg, skip integrity checks
 alias yayskip='yay -S --mflags --skipinteg'   # build AUR pkg via yay, skip integrity checks
-alias trizenskip='trizen -S --skipinteg'      # build AUR pkg via trizen, skip integrity checks
 
 # ── Package queries & maintenance ─────────────────────────────────────────────
-alias fixpacman='sudo rm -f /var/lib/pacman/db.lck'      # clear a stuck pacman lock
-alias unlock='sudo rm /var/lib/pacman/db.lck'            # clear a stuck pacman lock
-alias rmpacmanlock='sudo rm /var/lib/pacman/db.lck'      # clear a stuck pacman lock
+alias unlock='sudo rm -f /var/lib/pacman/db.lck'            # clear a stuck pacman lock
 alias pamac-unlock='sudo rm /var/tmp/pamac/dbs/db.lock'  # clear a stuck pamac lock
 alias big='expac -H M "%m\t%n" | sort -h | nl'           # installed packages sorted by size
 alias rip="expac --timefmt='%Y-%m-%d %T' '%l\t%n %v' | sort | tail -200 | nl"   # last 200 packages installed
