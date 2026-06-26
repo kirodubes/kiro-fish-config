@@ -8,16 +8,17 @@ Fish shell configuration for the Kiro Arch Linux distro.
 
 ## What it ships
 
-Delivered to `/etc/skel/.config/fish/` so every new user inherits it:
+A two-tier config, so package upgrades never clobber your personal settings:
 
-- `config.fish` — the Kiro fish configuration.
-- `fish-for-bash-users.md` — cheat-sheet for users coming from bash.
-- Numbered helper scripts to opt into oh-my-fish / fisher / tide:
-  `1-install-oh-my-fish.sh` … `4-install-tide-plugin.sh`, plus
-  `666-remove-oh-my-fish-and-all-folders-completely.sh` to undo them.
+- `/usr/share/kiro/fish/kiro-config.fish` — the **payload**: Kiro's default aliases,
+  functions, environment and a quiet greeting. Owned by the package and overwritten on every
+  upgrade, so don't edit it here.
+- `/etc/skel/.config/fish/config.fish` — a thin **stub** every new user inherits. It just
+  `source`s the payload and is the place for your own settings; upgrades never touch it.
 
-The oh-my-fish / fisher / tide frameworks are optional and installed on demand via the
-helper scripts.
+To customise, edit your own `~/.config/fish/config.fish` below the `source` line — your
+settings load last and override the Kiro defaults. Delete the `source` line to opt out
+entirely.
 
 ## Install
 
