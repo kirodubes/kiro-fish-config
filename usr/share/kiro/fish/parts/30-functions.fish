@@ -118,10 +118,10 @@ end
 # Categorised overview of everything this Kiro fish config ships — helper
 # functions, aliases (grouped by their section dividers), and keybindings.
 # Parses the live parts/*.fish so it never drifts from what is actually loaded.
-function kiro-help --description 'Overview of Kiro fish functions, aliases & keybindings'
+function fish-help --description 'Overview of Kiro fish functions, aliases & keybindings'
     set -l parts /usr/share/kiro/fish/parts
     if not test -d $parts
-        echo "kiro-help: parts not found at $parts (package not installed?)" >&2
+        echo "fish-help: parts not found at $parts (package not installed?)" >&2
         return 1
     end
 
@@ -146,11 +146,18 @@ function kiro-help --description 'Overview of Kiro fish functions, aliases & key
     echo
 
     # ── Aliases (grouped by their section dividers) ───────────────────────────
+    # The header is held in $pending and only printed once an alias appears under
+    # it, so empty sections (e.g. the commented-out personal block) are dropped.
     echo $hdr"ALIASES"$rst" (40-aliases.fish)"
+    set -l pending ''
     for line in (cat $parts/40-aliases.fish)
         if string match -qr '^#\s*──' -- $line
-            printf "\n  %s%s%s\n" $hdr (string replace -r '^#\s*──\s*(.*?)\s*─.*$' '$1' -- $line) $rst
+            set pending (string replace -r '^#\s*──\s*(.*?)\s*─.*$' '$1' -- $line)
         else if string match -qr '^\s*alias ' -- $line
+            if test -n "$pending"
+                printf "\n  %s%s%s\n" $hdr $pending $rst
+                set pending ''
+            end
             set -l name (string replace -r '^\s*alias ([A-Za-z0-9_.+-]+)=.*' '$1' -- $line)
             set -l cmt ''
             string match -qr '#' -- $line; and set cmt (string replace -r '^[^#]*#\s*' '' -- $line)

@@ -3,7 +3,7 @@
 ## 2026.06.26
 
 ### What Changed
-- Added a `kiro-help` function (`30-functions.fish`) that prints a categorised overview of
+- Added a `fish-help` function (`30-functions.fish`) that prints a categorised overview of
   everything the config ships — helper functions, aliases (grouped under their section
   dividers), and the history keybindings. It parses the live `parts/*.fish` at runtime, so the
   overview never drifts from what is actually loaded.
