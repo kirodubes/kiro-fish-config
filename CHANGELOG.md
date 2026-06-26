@@ -9,12 +9,25 @@
 - Reworked the config into the CachyOS-style **two-tier model**: a basic, documented,
   package-owned payload plus a thin user stub. Replaced the previous ~540-line maximalist
   `config.fish` with a clean default; the greeting is now quiet by default (no fastfetch).
+- Split the payload into a `parts/` directory sourced by a thin loader, and reintroduced the
+  full alias/function library (categorized, each line commented) plus colleague extras (`!!`/`!$`
+  history helpers, recursive `copy`, `done`-plugin tuning). Personal/dev-box aliases are shipped
+  commented-out. Added a Heritage & credits table (README) crediting CachyOS/Garuda/Manjaro.
+- Added a pacman `.install` scriptlet (`post_install`/`post_upgrade`) that tells existing users how
+  to copy the stub into their home (new users get it via `/etc/skel`). Hashtagged the forced
+  `TERM=xterm-256color` (let the terminal own `TERM`). Fixed `README.md` mode to `0644`.
 
 ### Technical Details
 - **Payload** (package-owned, overwritten on upgrade): `usr/share/kiro/fish/kiro-config.fish`
-  — PATH/env (set before the interactive guard), bat man-pager, a quiet greeting, native
-  prompt (zero-dep), a few helper functions (`history`, `backup`, `reload`) and a trimmed
-  Manjaro-lineage alias set. No colours/prompt baked in (left to the Fish Tweak Tool).
+  is now a thin **loader** that sources `usr/share/kiro/fish/parts/*.fish`:
+  `00-env` (PATH/env, before the interactive guard) · `10-interactive` (TERM, fzf opts, quiet
+  greeting, prompt/colour pointers) · `20-keybindings` (`!!`/`!$`) · `30-functions` ·
+  `40-aliases` (full categorized library + commented personal block) · `50-integrations`
+  (fzf/direnv/tree hooks, `__done_*` via `set -g`). No colours/prompt baked in (Fish Tweak Tool).
+- Loader uses a plain `*.fish` glob (fish has no `[..]` bracket globs) and skips the
+  already-sourced `00-env.fish`. `copy` adapted to fish-native `string trim` (no `trim-right`
+  dependency); `cleanup` is now a function that no-ops when there are no orphans; `bupskel`/
+  `clean`/`cls` single-quoted so `(date)`/`(tput cols)` evaluate at call time, not at startup.
 - **Stub** (user-owned, never touched by upgrades): `etc/skel/.config/fish/config.fish` now
   just `source`s the payload and documents where to put personal settings.
 - `/etc/skel` slimmed to **only** `config.fish` — removed the numbered oh-my-fish/tide helper
@@ -25,7 +38,8 @@
 - `depends=('fish')`. Carries `conflicts=('cachyos-fish-config')` from `kiro-shells`.
 
 ### Files Modified
-- `usr/share/kiro/fish/kiro-config.fish` (new — the payload)
+- `usr/share/kiro/fish/kiro-config.fish` (the loader)
+- `usr/share/kiro/fish/parts/{00-env,10-interactive,20-keybindings,30-functions,40-aliases,50-integrations}.fish` (new)
 - `etc/skel/.config/fish/config.fish` (rewritten as the stub)
 - `etc/skel/.config/fish/{1..4-install-*.sh, 666-remove-*.sh, fish-for-bash-users.md}` (removed)
 - `KIRO-PKG-BUILD-APPS/kiro-fish-config/PKGBUILD` (`package()` rewrite + `optdepends`)

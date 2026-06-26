@@ -19,5 +19,5 @@
 
 source /usr/share/kiro/fish/kiro-config.fish
 
-# ── Your settings below ───────────────────────────────────────────────────────
-# alias gs='git status'
+#######################################################################
+
