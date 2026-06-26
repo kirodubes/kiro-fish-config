@@ -3,6 +3,10 @@
 ## 2026.06.26
 
 ### What Changed
+- Added a `kiro-help` function (`30-functions.fish`) that prints a categorised overview of
+  everything the config ships — helper functions, aliases (grouped under their section
+  dividers), and the history keybindings. It parses the live `parts/*.fish` at runtime, so the
+  overview never drifts from what is actually loaded.
 - Initial package. Split out of `kiro-shells`: ships the fish configuration as its own
   independently versioned package. `kiro-shells` is now a meta-package depending on
   `kiro-bash-config`, `kiro-zsh-config` and `kiro-fish-config`.
